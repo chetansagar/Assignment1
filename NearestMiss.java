@@ -37,6 +37,15 @@ public class NearestMiss {
 	    int n = 0;
 	    
 	    Scanner userinput = new Scanner(System.in);
+	    
+	    
+	  //loop to take the user input again and again to get the correct values from the user. here user input will be for n
+	    while(n<3 || n>11)
+	    {
+	    	System.out.println("Enter the value for n (n>2 and n<12) = ");
+		    n = userinput.nextInt();
+	    }
+	    
 	    //loop to take the user input again and again to get the correct values from the user. here user input will be for k
 	    while(k<10)
 	    {
@@ -44,19 +53,11 @@ public class NearestMiss {
 		    k = userinput.nextInt();
 	    }
 	    
-	    //loop to take the user input again and again to get the correct values from the user. here user input will be for n
-	    while(n<3 || n>11)
-	    {
-	    	System.out.println("Enter the value for n (n>2 and n<12) = ");
-		    n = userinput.nextInt();
-	    }
 	    
-	    System.out.println("x ==> " + x );
-    	System.out.println("y ==> " + y );
-    	System.out.println("n ==> " + n );
     	
-	    double smallestmiss = 100000000000000.00; 
-	    
+	    double smallrelativedifference = 100000000000000.00; 
+	    long atx = 0;
+	    long aty = 0;
 	    //Nested loop is applied to test the every possible combination of x and y for n power and k range.
 	    for (x = 10; x<=k; x++) 
 	    {
@@ -65,37 +66,33 @@ public class NearestMiss {
 	    		long nearestmiss = 0;
 	    		//Calculating the result of x^n + y^n
 	    		long addxnyn = (long)((Math.pow (x, n))+(Math.pow (y, n)));
-	    		System.out.println(x+"^"+n+" + "+y+"^"+n+" ==> "+addxnyn);
 	        
 	    		//Taking the nth root of x^n + y^n to calculate z
 	    		z = (int) Math.pow (addxnyn, 1.0/n);
-	    		System.out.println("Value for z ==> "+z);
 	    		//Subtract z^n from x^n + y^n, it will give us near miss
-	    		long misswithz = (long)(addxnyn - Math.pow (z, n));
-	    		System.out.println("Near miss for (z^n) = "+misswithz);
+	    		long diffz = (long)(addxnyn - Math.pow (z, n));
 	    		//Subtract x^n + y^n from (z+1)^n, it will give us an other near miss
-	    		long misswithzplus1 = (long)(Math.pow (z+1, n) - addxnyn);
-	    		System.out.println("Near miss for ((z+1)^n) = "+misswithzplus1);
+	    		long diffz1 = (long)(Math.pow (z+1, n) - addxnyn);
 	    		//Comparing both near misses and select the one which is smaller
-	    		if(misswithz<misswithzplus1)
-	    			nearestmiss = misswithz;	        
+	    		if(diffz<diffz1)
+	    			nearestmiss = diffz;	        
 	    		else
-	    			nearestmiss = misswithzplus1;
+	    			nearestmiss = diffz1;
 	        
 	    		//As mentioned in Assignment's instruction applied the formula to calculate relative miss
-	    		double relativemiss = 100. * nearestmiss / addxnyn;
-	    		System.out.println("Near Miss ==> "+nearestmiss);
-	    		System.out.println("Miss ==> "+relativemiss);
+	    		double relativemiss = 1. * nearestmiss / addxnyn;
 	        
 	        
 	    		//comparing the relative miss from the smallest miss to find out Possible Smallest miss
-	    		if(relativemiss<smallestmiss)
-	    			smallestmiss=relativemiss;
-	    		System.out.println("Smallest Miss ==> "+smallestmiss);
-	    		System.out.println("\n\n");
-	           
+	    		if(relativemiss<smallrelativedifference)
+	    		{
+	    			smallrelativedifference=relativemiss;
+	    			atx = x; aty = y;
+	    		}
+	    				           
 	        }
 	    }
+	    System.out.println("\nResults:\n\tx = "+atx+", y = "+aty+",  relative difference= " + String.format("%.7f", smallrelativedifference));
 	}
 }
 
